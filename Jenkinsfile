@@ -3,7 +3,7 @@ node {
       choice(name: "selectRepository", choices: ['https://github.com/asirsikar319/swashtech-service.git', 'https://github.com/asirsikar319/swashtech-quickcare-service.git', 'https://github.com/asirsikar319/swashtech-rushmgmt-service.git'])
   }
   stage("Git Clone"){
-      git credentialsId: 'asirsikar319_github', url: '$params.selectRepository'
+      git credentialsId: 'asirsikar319_github', url: '${selectRepository}'
   }
   stage("Build"){
       sh 'mvn clean install'
