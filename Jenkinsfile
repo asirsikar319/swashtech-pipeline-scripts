@@ -12,18 +12,18 @@ node {
         sh 'docker login -u asirsikar319 -p $PASSWORD'
   }
   stage("Pushing Image"){
-        sh 'docker push asirsikar319/swashtech-service:latest'
+        sh 'docker push asirsikar319/${serviceName}:${imageVersion}'
   }
   stage('Deploy') {
     withKubeConfig([credentialsId: 'asirsikar319_kubernates',
                     serverUrl: 'https://kubernetes.docker.internal:6443',
                     contextName: 'docker-desktop',
                     clusterName: 'docker-desktop',
-                    namespace: 'swashtech'
+                    namespace: '${namespace}'
                     ]) {
       sh 'kubectl apply -f deployment.yaml'
-      sh 'kubectl expose deployment swashtech-service --type=NodePort --port=8080 --target-port=8080 -n swashtech'
-      sh 'kubectl create configmap swashtech-service --from-file=etc/config/ -n swashtech'
+      sh 'kubectl expose deployment ${serviceName} --type=NodePort --port=8080 --target-port=8080 -n ${namespace}'
+      sh 'kubectl create configmap ${serviceName} --from-file=etc/config/ -n ${namespace}'
     }
   }
 }
