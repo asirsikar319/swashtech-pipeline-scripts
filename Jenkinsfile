@@ -11,9 +11,9 @@ node {
   withCredentials([string(credentialsId: 'dockerhub_pwd', variable: 'PASSWORD')]) {
         sh 'docker login -u asirsikar319 -p $PASSWORD'
   }
-  //stage("Pushing Image"){
-  //      sh 'docker push asirsikar319/${serviceName}:${imageVersion}'
-  //}
+  stage("Pushing Image"){
+        sh 'docker push asirsikar319/${serviceName}:${imageVersion}'
+  }
   stage('Deploy') {
     withKubeConfig([credentialsId: 'asirsikar319_kubernates',
                     serverUrl: 'https://kubernetes.docker.internal:6443',
