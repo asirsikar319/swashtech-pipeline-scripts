@@ -12,7 +12,7 @@ node {
   //      sh 'docker login -u asirsikar319 -p $PASSWORD'
   //}
   //stage("Pushing Image"){
-        sh 'docker push asirsikar319/${serviceName}:${imageVersion}'
+   //     sh 'docker push asirsikar319/${serviceName}:${imageVersion}'
  // }
   stage('Deploy') {
     withKubeConfig([credentialsId: 'asirsikar319_kubernates',
