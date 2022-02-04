@@ -23,7 +23,7 @@ node {
                     ]) {
       when {
         expression {
-           'service/${serviceName}' ==  sh 'kubectl get svc ${serviceName} -n ${namespace} -o=name'
+           'service/${serviceName}' ==  sh(returnStdout: true, script: 'kubectl get svc ${serviceName} -n ${namespace} -o=name').trim()
         }
       }
       steps {
