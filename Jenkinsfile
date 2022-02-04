@@ -21,8 +21,8 @@ node {
                     clusterName: 'docker-desktop',
                     namespace: '${namespace}'
                     ]) {
-      sh 'kubectl delete -f deployment.yaml'
-      sh 'kubectl delete configmap ${serviceName} -n ${namespace}'
+      //sh 'kubectl delete -f deployment.yaml'
+      //sh 'kubectl delete configmap ${serviceName} -n ${namespace}'
       sh 'kubectl apply -f deployment.yaml'
       //sh 'kubectl expose deployment ${serviceName} --type=NodePort --port=8080 --target-port=8080 -n ${namespace}'
       sh 'kubectl create configmap ${serviceName} --from-file=etc/config/ -n ${namespace}'
