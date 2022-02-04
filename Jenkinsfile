@@ -14,7 +14,7 @@ node {
   stage("Pushing Image"){
         sh 'docker push asirsikar319/${serviceName}:${imageVersion}'
   }
-  if('${deploymentType}' == 'New'){
+  if(params.deploymentType == "New"){
     stage('Deploy') {
     withKubeConfig([credentialsId: 'asirsikar319_kubernates',
                     serverUrl: 'https://kubernetes.docker.internal:6443',
