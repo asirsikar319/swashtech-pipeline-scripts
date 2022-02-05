@@ -8,12 +8,12 @@ node {
   stage("Building Image"){
         sh 'mvn clean package docker:build'
   }
-  withCredentials([string(credentialsId: 'dockerhub_pwd', variable: 'PASSWORD')]) {
+  /*withCredentials([string(credentialsId: 'dockerhub_pwd', variable: 'PASSWORD')]) {
         sh 'docker login -u asirsikar319 -p $PASSWORD'
   }
   stage("Pushing Image"){
         sh 'docker push asirsikar319/${serviceName}:${imageVersion}'
-  }
+  }*/
   if(params.deploymentType == "New"){
     stage('Deploy') {
     withKubeConfig([credentialsId: 'asirsikar319_kubernates',
