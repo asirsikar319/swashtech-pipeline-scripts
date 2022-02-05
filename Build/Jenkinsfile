@@ -15,6 +15,6 @@ node {
         sh 'docker push asirsikar319/${serviceName}:${imageVersion}'
   }
   stage("Delete Local Image"){
-        sh 'docker rmi $(docker images | grep asirsikar319/${serviceName})'
+        sh 'docker rmi asirsikar319/${serviceName}'
   }
 }
