@@ -13,7 +13,7 @@ node {
   }
   stage("Pushing Image"){
         sh 'docker push asirsikar319/${serviceName}:${imageVersion}'
-  }
+  }*/
   if(params.deploymentType == "New"){
     stage('Deploy') {
     withKubeConfig([credentialsId: 'asirsikar319_kubernates',
@@ -40,5 +40,5 @@ node {
       sh 'kubectl create configmap ${serviceName} --from-file=etc/config/ -n ${namespace}'      
     }
    }
-  }*/
+  }
 }
