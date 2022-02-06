@@ -32,7 +32,4 @@ node {
     }
    }
   }
-  stage("Delete Local Image"){
-        sh 'docker rmi asirsikar319/${serviceName}:none'
-  }
 }
