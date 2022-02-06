@@ -5,6 +5,9 @@ node {
   withCredentials([string(credentialsId: 'dockerhub_pwd', variable: 'PASSWORD')]) {
         sh 'docker login -u asirsikar319 -p $PASSWORD'
   }
+  stage("Delete Local Image"){
+        sh 'docker rmi asirsikar319/${serviceName}'
+  }
   if(params.deploymentType == "New"){
     stage('Deploy') {
     withKubeConfig([credentialsId: 'asirsikar319_kubernates',
