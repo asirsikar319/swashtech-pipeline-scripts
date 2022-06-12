@@ -17,7 +17,7 @@ node {
       sh 'kubectl create configmap ${serviceName} --from-file=etc/config/ -n ${namespace}'      
     }
    }
-  }else{
+  }else if(params.deploymentType == "Update"){
     stage('Deploy') {
     withKubeConfig([credentialsId: 'asirsikar319_kubernates',
                     serverUrl: 'https://kubernetes.docker.internal:6443',
@@ -29,6 +29,18 @@ node {
       sh 'kubectl delete configmap ${serviceName} -n ${namespace}'
       sh 'kubectl apply -f deployment.yaml'
       sh 'kubectl create configmap ${serviceName} --from-file=etc/config/ -n ${namespace}'      
+    }
+   }
+  }else if(params.deploymentType == "Delete"){
+    stage('Deploy') {
+    withKubeConfig([credentialsId: 'asirsikar319_kubernates',
+                    serverUrl: 'https://kubernetes.docker.internal:6443',
+                    contextName: 'docker-desktop',
+                    clusterName: 'docker-desktop',
+                    namespace: '${namespace}'
+                    ]) {
+      sh 'kubectl delete -f deployment.yaml'
+      sh 'kubectl delete configmap ${serviceName} -n ${namespace}'   
     }
    }
   }
