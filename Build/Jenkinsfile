@@ -1,4 +1,5 @@
 node {
+  currentBuild.displayName = "${serviceName} : ${imageVersion}"
   stage("Git Clone"){
       git credentialsId: 'asirsikar319_github', url: '${selectRepository}'
   }
