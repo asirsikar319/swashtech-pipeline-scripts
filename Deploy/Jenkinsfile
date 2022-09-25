@@ -1,7 +1,7 @@
 node {
   stage("Git Clone"){
       git credentialsId: 'asirsikar319_github', url: '${selectRepository}'
-      currentBuild.displayName = ${serviceName}
+      currentBuild.displayName = '${serviceName}'
   }
   withCredentials([string(credentialsId: 'dockerhub_pwd', variable: 'PASSWORD')]) {
         sh 'docker login -u asirsikar319 -p $PASSWORD'
