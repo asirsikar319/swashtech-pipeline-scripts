@@ -6,8 +6,10 @@ node {
   stage("Build"){
       sh 'mvn clean install'
   }
-  stage("Sonar Build"){
-      sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=swashtech'
+  stage("Sonar Scan"){
+      withCredentials([string(credentialsId: 'sonarqube_pwd', variable: 'PASSWORD')]) {
+          sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=$PASSWORD'
+      }
   }
   stage("Building Image"){
        sh 'mvn clean package docker:build'
