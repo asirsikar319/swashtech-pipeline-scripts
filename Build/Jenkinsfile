@@ -1,10 +1,22 @@
-node {
-  currentBuild.displayName = "${serviceName} : ${imageVersion}"
+node  {
+  //currentBuild.displayName = "${serviceName} : ${imageVersion}"
   stage("Git Clone"){
       git credentialsId: 'asirsikar319_github', url: '${selectRepository}'
   }
+  stage("Update Version"){
+	  sh 'mvn versions:set -DnewVersion=$(curl "http://myspace.swashtech.com:8081/repository/maven-releases/com/swashtech/${serviceName}/maven-metadata.xml" | grep -o "<release>.*</release>" | sed -n "/release/{s/.*<release>//;s/<\\/release.*//;p;}")'
+	  sh 'mvn validate -DbumpPatchVersion'
+  }
+  def output = sh( 
+    script: 'grep -e "<version>.*</version>" pom.xml | sort | tail -n 1 | sed -n "/version/{s/.*<version>//;s/<\\/version.*//;p;}"', 
+    returnStdout: true
+  )
+  currentBuild.displayName = "${serviceName} : "+output;
   stage("Build"){
       sh 'mvn clean install'
+  }
+  stage("Upload Artifact to Nexus"){
+      sh 'mvn deploy:deploy-file -Dversion=$(grep -e "<version>.*</version>" pom.xml | sort | tail -n 1 | sed -n "/version/{s/.*<version>//;s/<\\/version.*//;p;}") -DgroupId=com.swashtech -DartifactId=${serviceName} -DgeneratePom=true -Dpackaging=jar -DrepositoryId=nexusdeploymentrepo -Durl=http://myspace.swashtech.com:8081/repository/maven-releases/ -Dfile=target/${serviceName}-$(grep -e "<version>.*</version>" pom.xml | sort | tail -n 1 | sed -n "/version/{s/.*<version>//;s/<\\/version.*//;p;}").jar'
   }
   stage("Sonar Scan"){
       withCredentials([string(credentialsId: 'sonarqube_pwd', variable: 'PASSWORD')]) {
